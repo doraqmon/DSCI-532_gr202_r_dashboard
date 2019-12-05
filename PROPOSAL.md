@@ -1,10 +1,10 @@
 ## Proposal
 ### Section 1: Motivation and Purpose 
 	
-In order to make Boston a safer place, we propose making a data visualization app to help visitors determine where/when to visit, help police deal with crime and help residents determine where to live/where to go out. Our app will utilize data provided by the Boston Police Department. Users can filter based on the time of day or specific crime type in order to see which areas are the most dangerous. In addition, our app will feature a trend graph where users can see the trends of criminal activity over the user-specified date range. 
+In order to make Boston a safer place, we propose making a data visualization app to help visitors determine where/when to visit, help police deal with crime and help residents determine where to live/where to go out. Our app will utilize data provided by the Boston Police Department. Users can filter based on the year, neighbourhood, or crime type in order to see which areas are the most dangerous. In addition, our app will feature a trend graph where users can see the trends of criminal activity over the user-specified date range. 
 
 ### Section 2: Description of the data
-Our app will be based on a dataset of approximately 260,000 crime reports collected over a time period from 2015 to 2018. Our dataset is provided by the Boston Police Department, and was posted publicly on Kaggle. Each crime report contains 17 different variables which describe various aspects of the crime such as the exact location the crime was committed (`STREET`, `LATITUDE`, `LONGITUDE`, `LOCATION`), when the crime was committed (`OCCURRED_ON_DATE`, `YEAR`, `MONTH`, `DAY_OF_WEEK`, `HOUR`) and the type of crime committed (`OFFENSE_CODE`, `OFFENSE_DESCRIPTION`).
+Our app will be based on a dataset of approximately 260,000 crime reports collected over a time period from 2015 to 2018. Our dataset is provided by the Boston Police Department, and was posted publicly on Kaggle. Each crime report contains 17 different variables which describe various aspects of the crime such as the exact location the crime was committed (`LATITUDE`, `LONGITUDE`), when the crime was committed (`YEAR`, `DAY_OF_WEEK`, `HOUR`) and the type of crime committed (`OFFENSE_CODE`, `OFFENSE_DESCRIPTION`).
 
 ### Section 3: Research questions and usage scenarios
 **Questions**:
