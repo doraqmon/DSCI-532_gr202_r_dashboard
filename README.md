@@ -14,7 +14,7 @@ All four graphs can be adjusted based on user input. From the dropdown lists, us
 
 ## Preview
 
-![sketch](./img/workingapp.png)
+![sketch](./img/sketch.jpg)
 
 ## Deployment 
 [App hosted at Heroku!](https://gr202-dashboard-milestone2.herokuapp.com/) Please be patient, the app takes awhile to fully load up! 
