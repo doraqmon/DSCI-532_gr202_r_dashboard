@@ -14,6 +14,9 @@ All four graphs can be adjusted based on user input. From the dropdown lists, us
 
 ![sketch](./img/sketch.jpg)
 
+## Current Progress
+
+![screenshot](./img/process_screenshot.jpg)
 
 ## Contributing
 
