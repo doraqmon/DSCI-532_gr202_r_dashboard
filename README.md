@@ -4,8 +4,6 @@
 
 *__Creators__: Mike Chen, Alexander Hinton, Andrea Lee, Yingping Qian*
 
-https://gr202-dashboard-milestone2.herokuapp.com/
- 
 Boston Crime App is an interactive data visualization application that displays the crimes in Boston between 2015 and 2018 based on the data from the Boston Police Department.
 
 The app contains a landing page that shows four plots. The first graph is a choropleth map showing the count of crime in each neighbourhood on a map of Boston. The second graph is a line graph outlining the trend of selected crime types over time. The third graph is a bar graph of the occurrences of different types of crime. The fourth graph is a heat map showing the occurrences of crime by the time of the day, and by day of the week.
@@ -16,8 +14,6 @@ All four graphs can be adjusted based on user input. From the dropdown lists, us
 
 ![sketch](./img/sketch.jpg)
 
-## Deployment 
-[App hosted at Heroku!](https://gr202-dashboard-milestone2.herokuapp.com/) Please be patient, the app takes awhile to fully load up! 
 
 ## Contributing
 
@@ -29,5 +25,3 @@ If you would like to make any contribution to our app, you can fork this repo an
 
 Please note all contributors must abide by our [CODE OF CONDUCT](./CODE_OF_CONDUCT.md).
 
-### References
-[Creating choropleth maps in Altair](https://medium.com/dataexplorations/creating-choropleth-maps-in-altair-eeb7085779a1)
