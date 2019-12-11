@@ -5,6 +5,7 @@ library(dashTable)
 library(tidyverse)
 library(plotly)
 library(tools)
+library(lubridate)
 
 # LOAD IN DATASETS
 # read in data frames
@@ -75,6 +76,19 @@ choro <- function(merged_df){
     return(choro)
 }
 
+# TREND PLOT FUNCTION
+trendplot <- function(df){
+    trend <- df %>%
+        group_by(YEAR, MONTH) %>%
+        summarise(count = n()) %>%
+        mutate(date = make_date(YEAR, MONTH, 1)) %>%
+        filter(date > "2015-06-01" & date < "2018-10-01") %>%
+        ggplot(aes(x = date, y = count)) +
+        geom_line(color = "#00AFBB") +
+        labs(title = 'Crime Trend', x = "Date", y = "Crime Count") +
+        scale_x_date(date_labels = "%b %Y")
+      return(trend)
+}
 
 # MAKE CHOROPLETH FUNCTION
 make_choropleth <- function(df, gdf, year = NULL, neighbourhood = NULL, crime = NULL) {
@@ -87,6 +101,11 @@ make_choropleth <- function(df, gdf, year = NULL, neighbourhood = NULL, crime = 
     return(choro(merged_df))
 }
 
+# MAKE TRENDPLOT FUNCTION
+make_trend_plot <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
+    df <- plot_filter(df, year = year, neighbourhood = neighbourhood, crime = crime)
+    return(trendplot(df))
+}
 
 # YEAR RANGE SLIDER
 yearMarks <- lapply(unique(df$YEAR), as.character)
@@ -138,8 +157,7 @@ graph <- dccGraph(
 )
 graph2 <- dccGraph(
   id = 'line-graph',
-  # TODO: Update this with function calls for line graph
-  # figure = 
+  figure = ggplotly(make_trend_plot(df))
 )
 graph3 <- dccGraph(
   id = 'heat-map',
