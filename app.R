@@ -102,8 +102,8 @@ yearSlider <- dccRangeSlider(
 )
 
 # CRIME DROPDOWN
-crime_key <- tibble(label = toTitleCase(unique(as.character(df$OFFENSE_CODE_GROUP))),
-                   value = as.character(unique(df$OFFENSE_CODE_GROUP)))
+crime_key <- tibble(label = sort(toTitleCase(tolower(unique(as.character(df$OFFENSE_CODE_GROUP))))),
+                   value = sort(as.character(unique(df$OFFENSE_CODE_GROUP))))
 
 crimeDropdown <- dccDropdown(
   id = "crime",
@@ -118,8 +118,8 @@ crimeDropdown <- dccDropdown(
 
 # NEIGHBOURHOOD DROPDOWN
 
-neigbourhood_key <- tibble(label = toTitleCase(unique(as.character(df$DISTRICT))),
-                   value = as.character(unique(df$DISTRICT)))
+neigbourhood_key <- tibble(label = sort(toTitleCase(unique(as.character(df$DISTRICT)))),
+                   value = sort(as.character(unique(df$DISTRICT))))
 
 neighbourhoodDropdown <- dccDropdown(
   id = "neighbourhood",
