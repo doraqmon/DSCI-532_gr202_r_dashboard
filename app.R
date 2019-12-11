@@ -73,6 +73,7 @@ choro <- function(merged_df){
              geom_polygon(data = merged_df, aes(fill = count, x = long, y = lat, group = group)) +
              theme_void() +
              coord_map()
+    choro <- ggplotly(choro)
     return(choro)
 }
 
@@ -103,6 +104,7 @@ trendplot <- function(df){
         geom_line(color = "#00AFBB") +
         labs(title = 'Crime Trend', x = "Date", y = "Crime Count") +
         scale_x_date(date_labels = "%b %Y")
+      trend <- ggplotly(trend)
       return(trend)
 }
 
@@ -117,6 +119,26 @@ make_choropleth <- function(df, gdf, year = NULL, neighbourhood = NULL, crime = 
     return(choro(merged_df))
 }
 
+# MAKE BAR DATAFRAME
+make_bar_dataframe <- function(df, year = NULL, neighbourhood = NULL, crime = NULL){
+  df <- plot_filter(df, year = year, neighbourhood = neighbourhood, crime = crime) %>%
+      group_by(OFFENSE_CODE_GROUP) %>%
+      tally(sort = TRUE)
+  top_ten <- df %>% head(10)
+  return(crime_bar_plot(top_ten))
+}
+# MAKE BAR PLOT 
+crime_bar_plot <- function(df) {
+    p <- df %>% 
+        ggplot() + 
+        geom_bar(aes(x = OFFENSE_CODE_GROUP, y = n), stat = "identity", fill = "#4682B4") +
+        coord_flip() +
+        xlab("Crime Type") + 
+        ylab("Crime Count") +
+        ggtitle("Crime Count by Type in Boston")
+    gp <- ggplotly(p, width = 700, height = 300)
+    gp
+}
 
 # MAKE HEATMAP FUNCTION
 make_heatmap_plot <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
@@ -175,11 +197,11 @@ neighbourhoodDropdown <- dccDropdown(
 
 graph <- dccGraph(
   id = 'choro-map',
-  figure = ggplotly(make_choropleth(df, gdf))
+  figure = make_choropleth(df, gdf)
 )
 graph2 <- dccGraph(
   id = 'line-graph',
-  figure = ggplotly(make_trend_plot(df))
+  figure = make_trend_plot(df)
 )
 graph3 <- dccGraph(
   id = 'heat-map',
@@ -188,7 +210,7 @@ graph3 <- dccGraph(
 graph4 <- dccGraph(
   id = 'bar-graph',
   # TODO: Update this with function calls for bar graph
-  # figure = 
+  figure = make_bar_dataframe(df)
 )
 
 external_stylesheets = 'https://codepen.io/chriddyp/pen/bWLwgP.css'
@@ -250,5 +272,46 @@ htmlDiv(
       graph4), className = "five columns")
 )
  
+# add callback
+
+app$callback(
+  #update data of choropleth map
+  output=list(id = 'choro-map', property='figure'),
+  params=list(input(id = 'year', property='value'),
+              input(id = 'neighbourhood', property='value'),
+              input(id = 'crime', property='value')),
+  function(year_value, neighbourhood_value, crime_value) {
+    make_choropleth(df, gdf, year_value, neighbourhood_value, crime_value)
+  })
+
+app$callback(
+  #update data of line graph
+  output=list(id = 'line-graph', property='figure'),
+  params=list(input(id = 'year', property='value'),
+              input(id = 'neighbourhood', property='value'),
+              input(id = 'crime', property='value')),
+  function(year_value, neighbourhood_value, crime_value) {
+    make_trend_plot(df, year_value, neighbourhood_value, crime_value)
+  })
+
+app$callback(
+  #update data of heat map
+  output=list(id = 'heat-map', property='figure'),
+  params=list(input(id = 'year', property='value'),
+              input(id = 'neighbourhood', property='value'),
+              input(id = 'crime', property='value')),
+  function(year_value, neighbourhood_value, crime_value) {
+    make_heatmap_plot(df, year_value, neighbourhood_value, crime_value)
+  })
+
+app$callback(
+  #update data of bar chart
+  output=list(id = 'bar-graph', property='figure'),
+  params=list(input(id = 'year', property='value'),
+              input(id = 'neighbourhood', property='value'),
+              input(id = 'crime', property='value')),
+  function(year_value, neighbourhood_value, crime_value) {
+    make_bar_dataframe(df, year_value, neighbourhood_value, crime_value)
+  })
 
 app$run_server()
