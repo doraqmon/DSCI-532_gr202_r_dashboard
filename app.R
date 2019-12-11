@@ -75,6 +75,20 @@ choro <- function(merged_df){
     return(choro)
 }
 
+#HEATMAP FUNCTION
+heatmap <- function(df) {
+    heatmap <- ggplot(df, aes(HOUR, DAY_OF_WEEK)) +
+                #geom_tile() +
+                geom_bin2d() +
+                scale_fill_distiller(palette="GnBu", direction=1) +
+                theme_minimal() +
+                labs(title = 'Occurence of Crime by Hour and Day', x = "Hour of Day", y = "Day of Week", fill = "Crime Count") +
+                theme(text = element_text(size = 18), plot.title = element_text(hjust = 0.5)) + 
+                theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+    heatmap <- ggplotly(heatmap)
+    options(repr.plot.width = 20, repr.plot.height = 10)
+    return(heatmap)
+}
 
 # MAKE CHOROPLETH FUNCTION
 make_choropleth <- function(df, gdf, year = NULL, neighbourhood = NULL, crime = NULL) {
@@ -87,6 +101,11 @@ make_choropleth <- function(df, gdf, year = NULL, neighbourhood = NULL, crime = 
     return(choro(merged_df))
 }
 
+# MAKE HEATMAP FUNCTION
+make_heatmap_plot <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
+    df <- plot_filter(df, year = year, neighbourhood = neighbourhood, crime = crime)
+    return(heatmap(df))
+}
 
 # YEAR RANGE SLIDER
 yearMarks <- lapply(unique(df$YEAR), as.character)
