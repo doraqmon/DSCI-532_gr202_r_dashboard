@@ -87,6 +87,26 @@ make_choropleth <- function(df, gdf, year = NULL, neighbourhood = NULL, crime = 
     return(choro(merged_df))
 }
 
+# MAKE BAR DATAFRAME
+make_bar_dataframe <- function(df, year = NULL, neighbourhood = NULL, crime = NULL){
+  df <- plot_filter(df, year = year, neighbourhood = neighbourhood, crime = crime) %>%
+      group_by(OFFENSE_CODE_GROUP) %>%
+      tally(sort = TRUE)
+  top_ten <- df %>% head(10)
+  return(crime_bar_plot(top_ten))
+}
+# MAKE BAR PLOT 
+crime_bar_plot <- function(df) {
+    p <- df %>% 
+        ggplot() + 
+        geom_bar(aes(x = OFFENSE_CODE_GROUP, y = n), stat = "identity", fill = "#4682B4") +
+        coord_flip() +
+        xlab("Crime Type") + 
+        ylab("Crime Count") +
+        ggtitle("Crime Count by Type in Boston")
+    gp <- ggplotly(p, width = 700, height = 300)
+    gp
+}
 
 # YEAR RANGE SLIDER
 yearMarks <- lapply(unique(df$YEAR), as.character)
@@ -149,7 +169,7 @@ graph3 <- dccGraph(
 graph4 <- dccGraph(
   id = 'bar-graph',
   # TODO: Update this with function calls for bar graph
-  # figure = 
+  figure = make_bar_dataframe(df)
 )
 
 external_stylesheets = 'https://codepen.io/chriddyp/pen/bWLwgP.css'
