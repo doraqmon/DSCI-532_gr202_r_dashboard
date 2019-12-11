@@ -71,7 +71,7 @@ choro <- function(merged_df){
              scale_fill_distiller(palette = "GnBu", direction  = 1) +
              geom_polygon(data = merged_df, aes(fill = count, x = long, y = lat, group = group)) +
              theme_void() +
-             coord_map() 
+             coord_map()
     return(choro)
 }
 
@@ -162,8 +162,7 @@ graph2 <- dccGraph(
 )
 graph3 <- dccGraph(
   id = 'heat-map',
-  # TODO: Update this with function calls for heat map
-  # figure = 
+  figure = make_heatmap_plot(df)
 )
 graph4 <- dccGraph(
   id = 'bar-graph',
@@ -199,7 +198,7 @@ app$layout(
      htmlP("Filter by neighbourhood", style = list(textAlign = 'center')),
      neighbourhoodDropdown,
      htmlBr(),
-     htmlP("Filter by year", style = list(textAlign = 'center')),
+     htmlP("Filter by crime", style = list(textAlign = 'center')),
      crimeDropdown,
      htmlBr(),
      htmlBr(),
