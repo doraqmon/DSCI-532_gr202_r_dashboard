@@ -134,23 +134,22 @@ neighbourhoodDropdown <- dccDropdown(
 
 graph <- dccGraph(
   id = 'choro-map',
-  # TODO: Update line below to call make_graph() instead of calling ggplotly(p)
- # figure = make_choropleth(df, gdf)
+  figure = ggplotly(make_choropleth(df, gdf))
 )
 graph2 <- dccGraph(
   id = 'line-graph',
-  # TODO: Update line below to call make_graph() instead of calling ggplotly(p)
- # figure = make_choropleth(df, gdf)
+  # TODO: Update this with function calls for line graph
+  # figure = 
 )
 graph3 <- dccGraph(
   id = 'heat-map',
-  # TODO: Update line below to call make_graph() instead of calling ggplotly(p)
- # figure = make_choropleth(df, gdf)
+  # TODO: Update this with function calls for heat map
+  # figure = 
 )
 graph4 <- dccGraph(
   id = 'bar-graph',
-  # TODO: Update line below to call make_graph() instead of calling ggplotly(p)
- # figure = make_choropleth(df, gdf)
+  # TODO: Update this with function calls for bar graph
+  # figure = 
 )
 
 external_stylesheets = 'https://codepen.io/chriddyp/pen/bWLwgP.css'
@@ -183,6 +182,11 @@ app$layout(
      htmlBr(),
      htmlP("Filter by year", style = list(textAlign = 'center')),
      crimeDropdown,
+     htmlBr(),
+     htmlBr(),
+     htmlBr(),
+     htmlBr(),
+     htmlBr(),
      htmlBr(),
      htmlBr(),
      htmlBr(),
