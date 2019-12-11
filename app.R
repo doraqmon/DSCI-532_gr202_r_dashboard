@@ -73,6 +73,7 @@ choro <- function(merged_df){
              geom_polygon(data = merged_df, aes(fill = count, x = long, y = lat, group = group)) +
              theme_void() +
              coord_map()
+    choro <- ggplotly(choro)
     return(choro)
 }
 
@@ -103,6 +104,7 @@ trendplot <- function(df){
         geom_line(color = "#00AFBB") +
         labs(title = 'Crime Trend', x = "Date", y = "Crime Count") +
         scale_x_date(date_labels = "%b %Y")
+      trend <- ggplotly(trend)
       return(trend)
 }
 
@@ -195,11 +197,11 @@ neighbourhoodDropdown <- dccDropdown(
 
 graph <- dccGraph(
   id = 'choro-map',
-  figure = ggplotly(make_choropleth(df, gdf))
+  figure = make_choropleth(df, gdf)
 )
 graph2 <- dccGraph(
   id = 'line-graph',
-  figure = ggplotly(make_trend_plot(df))
+  figure = make_trend_plot(df)
 )
 graph3 <- dccGraph(
   id = 'heat-map',
@@ -270,5 +272,46 @@ htmlDiv(
       graph4), className = "five columns")
 )
  
+# add callback
+
+app$callback(
+  #update data of choropleth map
+  output=list(id = 'choro-map', property='figure'),
+  params=list(input(id = 'year', property='value'),
+              input(id = 'neighbourhood', property='value'),
+              input(id = 'crime', property='value')),
+  function(year_value, neighbourhood_value, crime_value) {
+    make_choropleth(df, gdf, year_value, neighbourhood_value, crime_value)
+  })
+
+app$callback(
+  #update data of line graph
+  output=list(id = 'line-graph', property='figure'),
+  params=list(input(id = 'year', property='value'),
+              input(id = 'neighbourhood', property='value'),
+              input(id = 'crime', property='value')),
+  function(year_value, neighbourhood_value, crime_value) {
+    make_trend_plot(df, year_value, neighbourhood_value, crime_value)
+  })
+
+app$callback(
+  #update data of heat map
+  output=list(id = 'heat-map', property='figure'),
+  params=list(input(id = 'year', property='value'),
+              input(id = 'neighbourhood', property='value'),
+              input(id = 'crime', property='value')),
+  function(year_value, neighbourhood_value, crime_value) {
+    make_heatmap_plot(df, year_value, neighbourhood_value, crime_value)
+  })
+
+app$callback(
+  #update data of bar chart
+  output=list(id = 'bar-graph', property='figure'),
+  params=list(input(id = 'year', property='value'),
+              input(id = 'neighbourhood', property='value'),
+              input(id = 'crime', property='value')),
+  function(year_value, neighbourhood_value, crime_value) {
+    make_bar_dataframe(df, year_value, neighbourhood_value, crime_value)
+  })
 
 app$run_server()
