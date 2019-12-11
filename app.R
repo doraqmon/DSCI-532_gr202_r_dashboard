@@ -5,6 +5,7 @@ library(dashTable)
 library(tidyverse)
 library(plotly)
 library(tools)
+library(lubridate)
 
 # LOAD IN DATASETS
 # read in data frames
@@ -71,10 +72,39 @@ choro <- function(merged_df){
              scale_fill_distiller(palette = "GnBu", direction  = 1) +
              geom_polygon(data = merged_df, aes(fill = count, x = long, y = lat, group = group)) +
              theme_void() +
-             coord_map() 
+             coord_map()
     return(choro)
 }
 
+
+# HEATMAP FUNCTION
+heatmap <- function(df) {
+    heatmap <- ggplot(df, aes(HOUR, DAY_OF_WEEK)) +
+                #geom_tile() +
+                geom_bin2d() +
+                scale_fill_distiller(palette="GnBu", direction=1) +
+                theme_minimal() +
+                labs(title = 'Occurence of Crime by Hour and Day', x = "Hour of Day", y = "Day of Week", fill = "Crime Count") +
+                theme(text = element_text(size = 18), plot.title = element_text(hjust = 0.5)) + 
+                theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+    heatmap <- ggplotly(heatmap)
+    options(repr.plot.width = 20, repr.plot.height = 10)
+    return(heatmap)
+}
+
+# TREND PLOT FUNCTION
+trendplot <- function(df){
+    trend <- df %>%
+        group_by(YEAR, MONTH) %>%
+        summarise(count = n()) %>%
+        mutate(date = make_date(YEAR, MONTH, 1)) %>%
+        filter(date > "2015-06-01" & date < "2018-10-01") %>%
+        ggplot(aes(x = date, y = count)) +
+        geom_line(color = "#00AFBB") +
+        labs(title = 'Crime Trend', x = "Date", y = "Crime Count") +
+        scale_x_date(date_labels = "%b %Y")
+      return(trend)
+}
 
 # MAKE CHOROPLETH FUNCTION
 make_choropleth <- function(df, gdf, year = NULL, neighbourhood = NULL, crime = NULL) {
@@ -108,6 +138,17 @@ crime_bar_plot <- function(df) {
     gp
 }
 
+# MAKE HEATMAP FUNCTION
+make_heatmap_plot <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
+    df <- plot_filter(df, year = year, neighbourhood = neighbourhood, crime = crime)
+    return(heatmap(df))
+}
+# MAKE TRENDPLOT FUNCTION
+make_trend_plot <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
+    df <- plot_filter(df, year = year, neighbourhood = neighbourhood, crime = crime)
+    return(trendplot(df))
+}
+
 # YEAR RANGE SLIDER
 yearMarks <- lapply(unique(df$YEAR), as.character)
 names(yearMarks) <- unique(df$YEAR)
@@ -122,8 +163,8 @@ yearSlider <- dccRangeSlider(
 )
 
 # CRIME DROPDOWN
-crime_key <- tibble(label = toTitleCase(unique(as.character(df$OFFENSE_CODE_GROUP))),
-                   value = as.character(unique(df$OFFENSE_CODE_GROUP)))
+crime_key <- tibble(label = sort(toTitleCase(tolower(unique(as.character(df$OFFENSE_CODE_GROUP))))),
+                   value = sort(as.character(unique(df$OFFENSE_CODE_GROUP))))
 
 crimeDropdown <- dccDropdown(
   id = "crime",
@@ -138,8 +179,8 @@ crimeDropdown <- dccDropdown(
 
 # NEIGHBOURHOOD DROPDOWN
 
-neigbourhood_key <- tibble(label = toTitleCase(unique(as.character(df$DISTRICT))),
-                   value = as.character(unique(df$DISTRICT)))
+neigbourhood_key <- tibble(label = sort(toTitleCase(unique(as.character(df$DISTRICT)))),
+                   value = sort(as.character(unique(df$DISTRICT))))
 
 neighbourhoodDropdown <- dccDropdown(
   id = "neighbourhood",
@@ -158,13 +199,11 @@ graph <- dccGraph(
 )
 graph2 <- dccGraph(
   id = 'line-graph',
-  # TODO: Update this with function calls for line graph
-  # figure = 
+  figure = ggplotly(make_trend_plot(df))
 )
 graph3 <- dccGraph(
   id = 'heat-map',
-  # TODO: Update this with function calls for heat map
-  # figure = 
+  figure = make_heatmap_plot(df)
 )
 graph4 <- dccGraph(
   id = 'bar-graph',
@@ -200,7 +239,7 @@ app$layout(
      htmlP("Filter by neighbourhood", style = list(textAlign = 'center')),
      neighbourhoodDropdown,
      htmlBr(),
-     htmlP("Filter by year", style = list(textAlign = 'center')),
+     htmlP("Filter by crime", style = list(textAlign = 'center')),
      crimeDropdown,
      htmlBr(),
      htmlBr(),
