@@ -75,7 +75,7 @@ choro <- function(merged_df){
     return(choro)
 }
 
-#HEATMAP FUNCTION
+# HEATMAP FUNCTION
 heatmap <- function(df) {
     heatmap <- ggplot(df, aes(HOUR, DAY_OF_WEEK)) +
                 #geom_tile() +
