@@ -71,9 +71,11 @@ choro <- function(merged_df){
     choro <- ggplot(merged_df) +
              scale_fill_distiller(palette = "GnBu", direction  = 1) +
              geom_polygon(data = merged_df, aes(fill = count, x = long, y = lat, group = group)) +
-             theme_void() +
+             theme_minimal() +
+             labs(title = 'Crime Count by Neighbourhood', x = NULL, y = NULL, fill = "Crime Count") +
+             theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5)) + 
              coord_map()
-    choro <- ggplotly(choro)
+    choro <- ggplotly(choro) %>% config(displayModeBar = FALSE)
     return(choro)
 }
 
@@ -86,10 +88,10 @@ heatmap <- function(df) {
                 scale_fill_distiller(palette="GnBu", direction=1) +
                 theme_minimal() +
                 labs(title = 'Occurence of Crime by Hour and Day', x = "Hour of Day", y = "Day of Week", fill = "Crime Count") +
-                theme(text = element_text(size = 18), plot.title = element_text(hjust = 0.5)) + 
+                theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5)) + 
                 theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-    heatmap <- ggplotly(heatmap)
-    options(repr.plot.width = 20, repr.plot.height = 10)
+    heatmap <- ggplotly(heatmap) %>% config(displayModeBar = FALSE)
+    #options(repr.plot.width = 20, repr.plot.height = 10)
     return(heatmap)
 }
 
@@ -103,9 +105,26 @@ trendplot <- function(df){
         ggplot(aes(x = date, y = count)) +
         geom_line(color = "#00AFBB") +
         labs(title = 'Crime Trend', x = "Date", y = "Crime Count") +
-        scale_x_date(date_labels = "%b %Y")
-      trend <- ggplotly(trend)
+        scale_x_date(date_labels = "%b %Y") +
+        theme_minimal()+
+        theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
+      trend <- ggplotly(trend) %>% config(displayModeBar = FALSE)
       return(trend)
+}
+
+# MAKE BAR PLOT 
+crime_bar_plot <- function(df) {
+    p <- df %>% 
+        ggplot() + 
+        geom_bar(aes(x = OFFENSE_CODE_GROUP, y = n), stat = "identity", fill = "#4682B4") +
+        coord_flip() +
+        xlab("Crime") + 
+        ylab("Crime Count") +
+        ggtitle("Crime Count by Type") +
+        theme_minimal() +
+        theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
+    gp <- ggplotly(p) %>% config(displayModeBar = FALSE)
+    gp
 }
 
 # MAKE CHOROPLETH FUNCTION
@@ -126,18 +145,6 @@ make_bar_dataframe <- function(df, year = NULL, neighbourhood = NULL, crime = NU
       tally(sort = TRUE)
   top_ten <- df %>% head(10)
   return(crime_bar_plot(top_ten))
-}
-# MAKE BAR PLOT 
-crime_bar_plot <- function(df) {
-    p <- df %>% 
-        ggplot() + 
-        geom_bar(aes(x = OFFENSE_CODE_GROUP, y = n), stat = "identity", fill = "#4682B4") +
-        coord_flip() +
-        xlab("Crime Type") + 
-        ylab("Crime Count") +
-        ggtitle("Crime Count by Type in Boston")
-    gp <- ggplotly(p, width = 700, height = 300)
-    gp
 }
 
 # MAKE HEATMAP FUNCTION
