@@ -201,7 +201,7 @@ neighbourhoodDropdown <- dccDropdown(
 
 graph <- dccGraph(
   id = 'choro-map',
-  figure = make_choropleth(df, gdf),
+  figure = make_choropleth(df, gdf)
 )
 
 graph2 <- dccGraph(
