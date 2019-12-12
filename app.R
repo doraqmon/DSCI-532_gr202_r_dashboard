@@ -98,7 +98,6 @@ trendplot <- function(df){
         group_by(YEAR, MONTH) %>%
         summarise(count = n()) %>%
         mutate(date = make_date(YEAR, MONTH, 1)) %>%
-        filter(date > "2015-06-01" & date < "2018-10-01") %>%
         ggplot(aes(x = date, y = count)) +
         geom_line(color = "#00AFBB") +
         labs(title = 'Crime Trend', x = "Date", y = "Crime Count") +
@@ -272,7 +271,18 @@ app$layout(
 htmlDiv(
  list(
       graph3, 
-      graph4), className = "five columns")
+      graph4), className = "five columns"),
+
+# FOOTER
+htmlDiv(
+  list(
+    htmlP("This dashboard was made collaboratively by the DSCI 532 Group 202 in 2019.",
+      style = list(color = colors$ubc_blue, padding  = 4)))),
+htmlDiv(
+  list(  dccLink('Data Source ', href='https://www.kaggle.com/ankkur13/boston-crime-data'),
+    htmlBr(),
+    dccLink('Github Repo', href='https://github.com/UBC-MDS/DSCI-532_gr202_r_dashboard'))
+)
 )
  
 # add callback
