@@ -232,7 +232,8 @@ app$layout(
     list(
       htmlH2('Boston Crime Dashboard', 
              style = list( color = colors$white)),
-      htmlP("This Dash app will allow users to explore crime in Boston across time and space. The data set consists of over 300,000 Boston crime records between 2015 and 2018. Simply drag the sliders to select your desired year range. Select one or multiple values from the drop down menus to select which neighbourhoods or crimes you would like to explore. These options will filter all the graphs in the dashboard.", style = list( color = colors$white))), style = list(backgroundColor = colors$ubc_blue, 'padding' =  10)),
+      htmlP("This Dash app will allow users to explore crime in Boston across time and space. The data set consists of over 300,000 Boston crime records between 2015 and 2018. Simply drag the sliders to select your desired year range. Select one or multiple values from the drop down menus to select which neighbourhoods or crimes you would like to explore. These options will filter all the graphs in the dashboard.", 
+      style = list( color = colors$white))), style = list(backgroundColor = colors$ubc_blue, 'padding' =  10)),
  htmlDiv(
  list(
    #  htmlP("This is a thing", style = list( color = colors$white)),
@@ -276,14 +277,20 @@ htmlDiv(
 # FOOTER
 htmlDiv(
   list(
-    htmlP("This dashboard was made collaboratively by the DSCI 532 Group 202 in 2019.",
-      style = list(color = colors$ubc_blue, padding  = 4)))),
-htmlDiv(
-  list(  dccLink('Data Source ', href='https://www.kaggle.com/ankkur13/boston-crime-data'),
+    htmlP("This dashboard was made collaboratively by the DSCI 532 Group 202 in 2019."),
+    dccLink('Data Source ', href='https://www.kaggle.com/ankkur13/boston-crime-data'),
     htmlBr(),
-    dccLink('Github Repo', href='https://github.com/UBC-MDS/DSCI-532_gr202_r_dashboard'))
-)
-)
+    dccLink('Github Repo', href='https://github.com/UBC-MDS/DSCI-532_gr202_r_dashboard')), 
+      className =  "twelve columns", style = list(color = colors$ubc_blue, backgroundColor = colors$light_grey, padding  = 4))
+      ) 
+#   ),
+    
+# htmlDiv(
+#   list(  dccLink('Data Source ', href='https://www.kaggle.com/ankkur13/boston-crime-data'),
+#     htmlBr(),
+#     dccLink('Github Repo', href='https://github.com/UBC-MDS/DSCI-532_gr202_r_dashboard'))
+# )
+#)
  
 # add callback
 
