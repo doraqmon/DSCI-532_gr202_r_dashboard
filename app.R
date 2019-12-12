@@ -9,7 +9,7 @@ library(lubridate)
 
 # LOAD IN DATASETS
 # read in data frames
-df <- read_csv("data/crime_clean.csv", col_types = cols())
+df <- read_csv("data/crime_cleaned.csv", col_types = cols())
 gdf <- read_csv("data/geo_fortified.csv", col_types = cols())
 
 
