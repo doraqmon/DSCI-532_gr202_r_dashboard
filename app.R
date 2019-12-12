@@ -18,8 +18,7 @@ plot_filter <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
     filtered_df <- df
     if (!is.null(year)) {
         if (typeof(year) == 'list') {
-            year_list <- seq(year[[1]], year[[2]])
-            filtered_df <- filter(filtered_df, YEAR %in% year_list)
+            filtered_df <- filter(filtered_df, YEAR %in% seq(year[[1]], year[[2]]))
         }
         else {
             filtered_df <- filter(filtered_df, YEAR == year)
@@ -167,7 +166,7 @@ yearSlider <- dccRangeSlider(
   min = 2015,
   max = 2018,
   step = 4,
-  value = NULL
+  value = list(2015, 2018)
 )
 
 # CRIME DROPDOWN
@@ -180,7 +179,7 @@ crimeDropdown <- dccDropdown(
     1:nrow(crime_key), function(i){
       list(label=crime_key$label[i], value=crime_key$value[i])
     }),
-  value = NULL,
+  value = unique(df$OFFENSE_CODE_GROUP),
   style=list(width='95%'),
   multi = TRUE
 )
@@ -196,7 +195,7 @@ neighbourhoodDropdown <- dccDropdown(
     1:nrow(neigbourhood_key), function(i){
       list(label=neigbourhood_key$label[i], value=neigbourhood_key$value[i])
     }),
-  value = NULL,
+  value = unique(df$DISTRICT),
   style=list(width='95%'),
   multi = TRUE
 )
