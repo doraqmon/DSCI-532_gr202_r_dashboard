@@ -275,7 +275,18 @@ app$layout(
 htmlDiv(
  list(
       graph3, 
-      graph4), className = "five columns")
+      graph4), className = "five columns"),
+
+# FOOTER
+htmlDiv(
+  list(
+    htmlP("This dashboard was made collaboratively by the DSCI 532 Group 202 in 2019.",
+      style = list(color = colors$ubc_blue, padding  = 4)))),
+htmlDiv(
+  list(  dccLink('Data Source ', href='https://www.kaggle.com/ankkur13/boston-crime-data'),
+    htmlBr(),
+    dccLink('Github Repo', href='https://github.com/UBC-MDS/DSCI-532_gr202_r_dashboard'))
+)
 )
  
 # add callback
