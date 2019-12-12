@@ -203,7 +203,6 @@ graph <- dccGraph(
   id = 'choro-map',
   figure = make_choropleth(df, gdf)
 )
-
 graph2 <- dccGraph(
   id = 'line-graph',
   figure = make_trend_plot(df)
