@@ -167,7 +167,7 @@ yearSlider <- dccRangeSlider(
   min = 2015,
   max = 2018,
   step = 4,
-  value = seq(2015, 2018)
+  value = list(2015, 2018)
 )
 
 # CRIME DROPDOWN
