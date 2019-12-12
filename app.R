@@ -82,7 +82,6 @@ choro <- function(merged_df){
 # HEATMAP FUNCTION
 heatmap <- function(df) {
     heatmap <- ggplot(df, aes(HOUR, DAY_OF_WEEK)) +
-                #geom_tile() +
                 geom_bin2d() +
                 scale_fill_distiller(palette="GnBu", direction=1) +
                 theme_minimal() +
@@ -90,7 +89,6 @@ heatmap <- function(df) {
                 theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5)) + 
                 theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
     heatmap <- ggplotly(heatmap) %>% config(displayModeBar = FALSE)
-    #options(repr.plot.width = 20, repr.plot.height = 10)
     return(heatmap)
 }
 
@@ -123,7 +121,7 @@ crime_bar_plot <- function(df) {
         theme_minimal() +
         theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
     gp <- ggplotly(p) %>% config(displayModeBar = FALSE)
-    gp
+    return(gp)
 }
 
 # MAKE CHOROPLETH FUNCTION
@@ -180,7 +178,7 @@ crimeDropdown <- dccDropdown(
     1:nrow(crime_key), function(i){
       list(label=crime_key$label[i], value=crime_key$value[i])
     }),
-  value = unique(df$OFFENSE_CODE_GROUP),
+  value = sort(unique(df$OFFENSE_CODE_GROUP)),
   style=list(width='95%'),
   multi = TRUE
 )
@@ -196,7 +194,7 @@ neighbourhoodDropdown <- dccDropdown(
     1:nrow(neigbourhood_key), function(i){
       list(label=neigbourhood_key$label[i], value=neigbourhood_key$value[i])
     }),
-  value = unique(df$DISTRICT),
+  value = sort(unique(df$DISTRICT)),
   style=list(width='95%'),
   multi = TRUE
 )
@@ -215,7 +213,6 @@ graph3 <- dccGraph(
 )
 graph4 <- dccGraph(
   id = 'bar-graph',
-  # TODO: Update this with function calls for bar graph
   figure = make_bar_dataframe(df)
 )
 
