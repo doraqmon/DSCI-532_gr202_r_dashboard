@@ -113,7 +113,7 @@ heatmap <- function(df) {
                 labs(title = 'Occurence of Crime by Hour and Day', x = "Hour of Day", y = "Day of Week", fill = "Crime Count") +
                 theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5)) + 
                 theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-    heatmap <- ggplotly(heatmap, tooltip = c('x', 'y', 'text')) %>% config(displayModeBar = FALSE)
+    heatmap <- ggplotly(heatmap, tooltip = c('y', 'x', 'text')) %>% config(displayModeBar = FALSE)
     return(heatmap)
 }
 
