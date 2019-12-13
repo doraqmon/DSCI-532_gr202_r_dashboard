@@ -106,14 +106,14 @@ heatmap <- function(df) {
   heatmap <- df %>%
               mutate(Day = factor(DAY_OF_WEEK, levels = c("Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"))) %>%
               mutate(Hour = factor(HOUR)) %>%
-              ggplot(aes(x = Hour, y = Day, text = paste('Hour: ', x, '<br> Day: ', y, '<br> Count: ', ..count..))) +
+              ggplot(aes(x = Hour, y = Day, text = paste('Count: ', ..count..))) +
                 geom_bin2d() +
                 scale_fill_distiller(palette="GnBu", direction=1) +
                 theme_minimal() +
                 labs(title = 'Occurence of Crime by Hour and Day', x = "Hour of Day", y = "Day of Week", fill = "Crime Count") +
                 theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5)) + 
                 theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-    heatmap <- ggplotly(heatmap, tooltip = 'text') %>% config(displayModeBar = FALSE)
+    heatmap <- ggplotly(heatmap, tooltip = c('x', 'y', 'text')) %>% config(displayModeBar = FALSE)
     return(heatmap)
 }
 
@@ -146,7 +146,7 @@ trendplot <- function(df){
 #        group_by(Year, MONTH) %>%
 #        summarise(Count = n()) %>%
 #        mutate(Month = make_date(year=0, month=MONTH)) %>%
-#        ggplot(aes(x = Month, y = Count, text = paste('Year: ', Year, '<br> Month: ', MONTH, '<br> Count: ', Count))) +
+#        ggplot(aes(x = Month, y = Count, text = paste('Year: ', Year, '<br> Month: ', month(Month, label=TRUE, abbr=FALSE), '<br> Count: ', Count))) +
 #          geom_line(aes(color = Year)) +
 #          scale_color_brewer(palette="GnBu") +
 #          labs(title = 'Crime Trend', x = "Month", y = "Crime Count") +
@@ -170,7 +170,7 @@ crime_bar_plot <- function(df) {
           Count = n
         ) %>%
         ggplot() + 
-        geom_bar(aes(x = reorder(CrimeType, Count), y = Count), stat = "identity", fill = "#4682B4") +
+        geom_bar(aes(x = reorder(CrimeType, Count), y = Count, text = paste('Crime Type: ', CrimeType, '<br> Count: ', Count)), stat = "identity", fill = "#4682B4") +
         coord_flip() +
         xlab("Crime") + 
         ylab("Crime Count") +
@@ -178,7 +178,7 @@ crime_bar_plot <- function(df) {
         theme_minimal() +
         theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
 
-    gp <- ggplotly(p) %>% config(displayModeBar = FALSE)
+    gp <- ggplotly(p, tooltip = 'text') %>% config(displayModeBar = FALSE)
     return(gp)
 }
 
