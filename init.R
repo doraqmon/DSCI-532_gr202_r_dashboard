@@ -44,6 +44,9 @@ install.packages("https://cloud.r-project.org/src/contrib/codetools_0.2-16.tar.g
 install.packages("https://cloud.r-project.org/src/contrib/globals_0.12.5.tar.gz", type="source", repos=NULL)
 install.packages("https://cloud.r-project.org/src/contrib/Archive/future/future_1.11.1.1.tar.gz", type="source", repos=NULL)
 install.packages("https://cloud.r-project.org/src/contrib/lubridate_1.7.4.tar.gz", type="source", repos=NULL)
+install.packages("https://cloud.r-project.org/src/contrib/maps_3.3.0.tar.gz", type="source", repos=NULL)
+install.packages("https://cloud.r-project.org/src/contrib/mapproj_1.2.6.tar.gz", type="source", repos=NULL)
+
 
 # fiery and friends
 install.packages("https://cloud.r-project.org/src/contrib/routr_0.4.0.tar.gz", type="source", repos=NULL)
