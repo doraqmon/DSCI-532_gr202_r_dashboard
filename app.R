@@ -71,14 +71,14 @@ plot_filter <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
 choro <- function(merged_df){
     merged_df <- merged_df %>% rename(Neighbourhood = DISTRICT)
     choro <- merged_df %>%
-            ggplot(aes(label = Neighbourhood)) +
+            ggplot(aes(label = Neighbourhood, text = paste('Neighbourhood: ', Neighbourhood, '<br> Count: ', Count))) +
              scale_fill_distiller(palette = "GnBu", direction  = 1) +
              geom_polygon(data = merged_df, aes(fill = Count, x = long, y = lat, group = group)) +
              theme_minimal() +
              labs(title = 'Crime Count by Neighbourhood', x = NULL, y = NULL, fill = "Crime Count") +
              theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5)) + 
              coord_map()
-    choro <- ggplotly(choro) %>% config(displayModeBar = FALSE)
+    choro <- ggplotly(choro, tooltip = 'text') %>% config(displayModeBar = FALSE)
     return(choro)
 }
 
@@ -88,14 +88,14 @@ heatmap <- function(df) {
   heatmap <- df %>%
               mutate(Day = factor(DAY_OF_WEEK, levels = c("Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"))) %>%
               mutate(Hour = factor(HOUR)) %>%
-              ggplot(aes(x = Hour, y = Day)) +
+              ggplot(aes(x = Hour, y = Day, text = paste('Hour: ', ..x.., '<br> Day: ', ..y.., '<br> Count: ', ..count..))) +
                 geom_bin2d() +
                 scale_fill_distiller(palette="GnBu", direction=1) +
                 theme_minimal() +
                 labs(title = 'Occurence of Crime by Hour and Day', x = "Hour of Day", y = "Day of Week", fill = "Crime Count") +
                 theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5)) + 
                 theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-    heatmap <- ggplotly(heatmap) %>% config(displayModeBar = FALSE)
+    heatmap <- ggplotly(heatmap, tooltip = 'text') %>% config(displayModeBar = FALSE)
     return(heatmap)
 }
 
