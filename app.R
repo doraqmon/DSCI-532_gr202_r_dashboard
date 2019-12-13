@@ -106,7 +106,7 @@ heatmap <- function(df) {
   heatmap <- df %>%
               mutate(Day = factor(DAY_OF_WEEK, levels = c("Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"))) %>%
               mutate(Hour = factor(HOUR)) %>%
-              ggplot(aes(x = Hour, y = Day, text = paste('Hour: ', ..x.., '<br> Day: ', ..y.., '<br> Count: ', ..count..))) +
+              ggplot(aes(x = Hour, y = Day, text = paste('Hour: ', x, '<br> Day: ', y, '<br> Count: ', ..count..))) +
                 geom_bin2d() +
                 scale_fill_distiller(palette="GnBu", direction=1) +
                 theme_minimal() +
@@ -139,17 +139,17 @@ trendplot <- function(df){
       return(trend)
 }
 
-# tooltip code below work but make lines disappear??
+# tooltip code below works but make lines disappear??
 #trendplot <- function(df){
 #    trend <- df %>%
 #        mutate(Year = factor(YEAR)) %>%
 #        group_by(Year, MONTH) %>%
 #        summarise(Count = n()) %>%
 #        mutate(Month = make_date(year=0, month=MONTH)) %>%
-#        ggplot(aes(x = Month, y = Count)) +
+#        ggplot(aes(x = Month, y = Count, text = paste('Year: ', Year, '<br> Month: ', MONTH, '<br> Count: ', Count))) +
 #          geom_line(aes(color = Year)) +
 #          scale_color_brewer(palette="GnBu") +
-#          labs(title = 'Crime Trend', x = "Month", y = "Crime Count", text = paste('Year: ', Year, '<br> Month: ', MONTH, '<br> Count: ', Count)) +
+#          labs(title = 'Crime Trend', x = "Month", y = "Crime Count") +
 #          scale_x_date(date_labels = "%b") +
 #          theme_minimal()+
 #          theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
