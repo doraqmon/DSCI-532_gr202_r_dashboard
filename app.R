@@ -354,4 +354,4 @@ app$callback(
     make_bar_dataframe(df, year_value, neighbourhood_value, crime_value)
   })
 
-app$run_server()
+app$run_server(host = "0.0.0.0", port = Sys.getenv('PORT', 8050))
