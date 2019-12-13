@@ -17,6 +17,16 @@ gdf <- read_csv("data/geo_fortified.csv", col_types = cols())
 
 ## FUNCTIONS
 plot_filter <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
+  #' Filters the given database in order to wrange the database into the proper dataframe 
+  #' required the graphs to display relevant information. Default value of NULL will allow 
+  #' the maps to display every single data point. Given specific information will filter the 
+  #' database
+  #' 
+  #' @param df Dataframe of crime data
+  #' @param year Year or list of years of crime committed
+  #' @param neighbourhood Neighbourhood or list of neighbourhoods where crime occurs 
+  #' @param crime Crime or list of crimes commited
+  #' @return  A filtered data frame of relevant information 
     filtered_df <- df
     if (!is.null(year)) {
         if (typeof(year) == 'list') {
@@ -69,6 +79,10 @@ plot_filter <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
 # mapping function based on all of the above
 # CHOROPLETH FUNCTION
 choro <- function(merged_df){
+  #' Generates Boston neighbourhoods choropleth map
+  #' 
+  #' @param merged_df Wrangled dataframe to produce plot
+  #' @return  Choropleth map
     merged_df <- merged_df %>% rename(Neighbourhood = DISTRICT)
     choro <- merged_df %>%
             ggplot(aes(label = Neighbourhood, text = paste('Neighbourhood: ', Neighbourhood, '<br> Count: ', Count))) +
@@ -85,6 +99,10 @@ choro <- function(merged_df){
 
 # HEATMAP FUNCTION
 heatmap <- function(df) {
+  #' Generates heatmap
+  #' 
+  #' @param df Wrangled dataframe to produce plot
+  #' @return  Heatmap
   heatmap <- df %>%
               mutate(Day = factor(DAY_OF_WEEK, levels = c("Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"))) %>%
               mutate(Hour = factor(HOUR)) %>%
@@ -101,6 +119,10 @@ heatmap <- function(df) {
 
 # TREND PLOT FUNCTION
 trendplot <- function(df){
+  #' Generates line graph
+  #' 
+  #' @param df Wrangled dataframe to produce plot
+  #' @return  Line graph
     trend <- df %>%
         mutate(Year = factor(YEAR)) %>%
         group_by(Year, MONTH) %>%
@@ -138,6 +160,10 @@ trendplot <- function(df){
 
 # MAKE BAR PLOT 
 crime_bar_plot <- function(df) {
+  #' Generates bar chart
+  #' 
+  #' @param df Wrangled dataframe to produce plot
+  #' @return  bar chart
     p <- df %>% 
         rename(
           CrimeType = OFFENSE_CODE_GROUP,
@@ -157,6 +183,14 @@ crime_bar_plot <- function(df) {
 
 # MAKE CHOROPLETH FUNCTION
 make_choropleth <- function(df, gdf, year = NULL, neighbourhood = NULL, crime = NULL) {
+  #'  Wrapper function to filter data and make choropleth map
+  #' 
+  #' @param df Wrangled dataframe to produce plot
+  #' @param gdf Geodataframe to produce plot
+  #' @param year Year or list of years of crime committed
+  #' @param neighbourhood Neighbourhood or list of neighbourhoods where crime occurs 
+  #' @param crime Crime or list of crimes commited
+  #' @return  Choropleth map
     inner_df <- plot_filter(df, year = year, neighbourhood = neighbourhood, crime = crime) %>%
             group_by(DISTRICT) %>%
             summarize(Count = n()) %>%
@@ -168,6 +202,13 @@ make_choropleth <- function(df, gdf, year = NULL, neighbourhood = NULL, crime = 
 
 # MAKE BAR DATAFRAME
 make_bar_dataframe <- function(df, year = NULL, neighbourhood = NULL, crime = NULL){
+  #'  Wrapper function to filter data and make bar chart
+  #' 
+  #' @param df Wrangled dataframe to produce plot
+  #' @param year Year or list of years of crime committed
+  #' @param neighbourhood Neighbourhood or list of neighbourhoods where crime occurs 
+  #' @param crime Crime or list of crimes commited
+  #' @return  Bar chart
   df <- plot_filter(df, year = year, neighbourhood = neighbourhood, crime = crime) %>%
       group_by(OFFENSE_CODE_GROUP) %>%
       tally(sort = TRUE)
@@ -177,11 +218,25 @@ make_bar_dataframe <- function(df, year = NULL, neighbourhood = NULL, crime = NU
 
 # MAKE HEATMAP FUNCTION
 make_heatmap_plot <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
+  #'  Wrapper function to filter data and make heatmap
+  #' 
+  #' @param df Wrangled dataframe to produce plot
+  #' @param year Year or list of years of crime committed
+  #' @param neighbourhood Neighbourhood or list of neighbourhoods where crime occurs 
+  #' @param crime Crime or list of crimes commited
+  #' @return  Heatmap
     df <- plot_filter(df, year = year, neighbourhood = neighbourhood, crime = crime)
     return(heatmap(df))
 }
 # MAKE TRENDPLOT FUNCTION
 make_trend_plot <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
+  #'  Wrapper function to filter data and make line graph
+  #' 
+  #' @param df Wrangled dataframe to produce plot
+  #' @param year Year or list of years of crime committed
+  #' @param neighbourhood Neighbourhood or list of neighbourhoods where crime occurs 
+  #' @param crime Crime or list of crimes commited
+  #' @return  Line graph
     df <- plot_filter(df, year = year, neighbourhood = neighbourhood, crime = crime)
     return(trendplot(df))
 }
