@@ -4,6 +4,8 @@
 
 *__Creators__: Mike Chen, Alexander Hinton, Andrea Lee, Yingping Qian*
 
+https://group-dash-milestone-4.herokuapp.com
+
 Boston Crime App is an interactive data visualization application that displays the crimes in Boston between 2015 and 2018 based on the data from the Boston Police Department.
 
 The app contains a landing page that shows four plots. The first graph is a choropleth map showing the count of crime in each neighbourhood on a map of Boston. The second graph is a line graph outlining the trend of selected crime types over time. The third graph is a bar graph of the occurrences of different types of crime. The fourth graph is a heat map showing the occurrences of crime by the time of the day, and by day of the week.
@@ -12,11 +14,11 @@ All four graphs can be adjusted based on user input. From the dropdown lists, us
 
 ## Preview
 
-![sketch](./img/sketch.jpg)
+![sketch](./img/preview.png)
 
-## Current Progress
+## Deployment
 
-![screenshot](./img/process_screenshot.jpg)
+[App hosted at Heroku!](https://group-dash-milestone-4.herokuapp.com) Please be patient, the app takes awhile to fully load up!
 
 ## Contributing
 

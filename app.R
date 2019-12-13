@@ -11,8 +11,8 @@ library(lubridate)
 
 # LOAD IN DATASETS
 # read in data frames
-df <- read_csv("data/crime_cleaned.csv", col_types = cols())
-gdf <- read_csv("data/geo_fortified.csv", col_types = cols())
+df <- read_csv("https://raw.githubusercontent.com/UBC-MDS/DSCI-532_gr202_r_dashboard/master/data/crime_cleaned.csv", col_types = cols())
+gdf <- read_csv("https://raw.githubusercontent.com/UBC-MDS/DSCI-532_gr202_r_dashboard/master/data/geo_fortified.csv", col_types = cols())
 
 
 ## FUNCTIONS
@@ -170,13 +170,14 @@ crime_bar_plot <- function(df) {
           Count = n
         ) %>%
         ggplot() + 
-          geom_bar(aes(x = CrimeType, y = Count), stat = "identity", fill = "#4682B4") +
-          coord_flip() +
-          xlab("Crime") + 
-          ylab("Crime Count") +
-          ggtitle("Crime Count by Type") +
-          theme_minimal() +
-          theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
+        geom_bar(aes(x = reorder(CrimeType, Count), y = Count), stat = "identity", fill = "#4682B4") +
+        coord_flip() +
+        xlab("Crime") + 
+        ylab("Crime Count") +
+        ggtitle("Crime Count by Type") +
+        theme_minimal() +
+        theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
+
     gp <- ggplotly(p) %>% config(displayModeBar = FALSE)
     return(gp)
 }
@@ -421,4 +422,4 @@ app$callback(
     make_bar_dataframe(df, year_value, neighbourhood_value, crime_value)
   })
 
-app$run_server()
+app$run_server(host = "0.0.0.0", port = Sys.getenv('PORT', 8050))
