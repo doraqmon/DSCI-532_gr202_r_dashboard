@@ -14,7 +14,7 @@ All four graphs can be adjusted based on user input. From the dropdown lists, us
 
 ## Preview
 
-![sketch](./img/sketch.jpg)
+![sketch](./img/preview.png)
 
 ## Deployment
 
