@@ -144,13 +144,14 @@ crime_bar_plot <- function(df) {
           Count = n
         ) %>%
         ggplot() + 
-          geom_bar(aes(x = CrimeType, y = Count), stat = "identity", fill = "#4682B4") +
-          coord_flip() +
-          xlab("Crime") + 
-          ylab("Crime Count") +
-          ggtitle("Crime Count by Type") +
-          theme_minimal() +
-          theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
+        geom_bar(aes(x = reorder(CrimeType, Count), y = Count), stat = "identity", fill = "#4682B4") +
+        coord_flip() +
+        xlab("Crime") + 
+        ylab("Crime Count") +
+        ggtitle("Crime Count by Type") +
+        theme_minimal() +
+        theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
+
     gp <- ggplotly(p) %>% config(displayModeBar = FALSE)
     return(gp)
 }
