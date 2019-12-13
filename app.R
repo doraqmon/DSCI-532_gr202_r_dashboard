@@ -7,7 +7,6 @@ library(dplyr)
 library(readr)
 library(stringr)
 library(plotly)
-library(tools)
 library(lubridate)
 
 # LOAD IN DATASETS
@@ -91,9 +90,9 @@ heatmap <- function(df) {
   heatmap <- df %>%
               rename(
                 Hour = HOUR,
-                Weekday = DAY_OF_WEEK
+                Day = DAY_OF_WEEK
               ) %>%
-              ggplot(aes(Hour, Weekday)) +
+              ggplot(aes(Hour, Day)) +
                 geom_bin2d() +
                 scale_fill_distiller(palette="GnBu", direction=1) +
                 theme_minimal() +
@@ -188,7 +187,7 @@ yearSlider <- dccRangeSlider(
 )
 
 # CRIME DROPDOWN
-crime_key <- tibble(label = sort(toTitleCase(tolower(unique(as.character(df$OFFENSE_CODE_GROUP))))),
+crime_key <- tibble(label = sort(unique(as.character(df$OFFENSE_CODE_GROUP))),
                    value = sort(as.character(unique(df$OFFENSE_CODE_GROUP))))
 
 crimeDropdown <- dccDropdown(
@@ -204,7 +203,7 @@ crimeDropdown <- dccDropdown(
 
 # NEIGHBOURHOOD DROPDOWN
 
-neigbourhood_key <- tibble(label = sort(toTitleCase(unique(as.character(df$DISTRICT)))),
+neigbourhood_key <- tibble(label = sort(unique(as.character(df$DISTRICT))),
                    value = sort(as.character(unique(df$DISTRICT))))
 
 neighbourhoodDropdown <- dccDropdown(
