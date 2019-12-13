@@ -131,7 +131,7 @@ crime_bar_plot <- function(df) {
           Count = n
         ) %>%
         ggplot() + 
-        geom_bar(aes(x = CrimeType, y = Count), stat = "identity", fill = "#4682B4") +
+        geom_bar(aes(x = reorder(CrimeType, Count), y = Count), stat = "identity", fill = "#4682B4") +
         coord_flip() +
         xlab("Crime") + 
         ylab("Crime Count") +
