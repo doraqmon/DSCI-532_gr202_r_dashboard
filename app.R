@@ -81,6 +81,9 @@ choro <- function(merged_df){
 
 # HEATMAP FUNCTION
 heatmap <- function(df) {
+    df <- df %>%
+          mutate(DAY_OF_WEEK = factor(DAY_OF_WEEK, levels = c("Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"))) %>%
+          mutate(HOUR = factor(HOUR))
     heatmap <- ggplot(df, aes(HOUR, DAY_OF_WEEK)) +
                 geom_bin2d() +
                 scale_fill_distiller(palette="GnBu", direction=1) +
