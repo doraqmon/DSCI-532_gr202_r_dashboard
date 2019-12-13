@@ -11,8 +11,8 @@ library(lubridate)
 
 # LOAD IN DATASETS
 # read in data frames
-df <- read_csv("data/crime_cleaned.csv", col_types = cols())
-gdf <- read_csv("data/geo_fortified.csv", col_types = cols())
+df <- read_csv("https://raw.githubusercontent.com/UBC-MDS/DSCI-532_gr202_r_dashboard/master/data/crime_cleaned.csv", col_types = cols())
+gdf <- read_csv("https://raw.githubusercontent.com/UBC-MDS/DSCI-532_gr202_r_dashboard/master/data/geo_fortified.csv", col_types = cols())
 
 
 ## FUNCTIONS
@@ -69,10 +69,11 @@ plot_filter <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
 # mapping function based on all of the above
 # CHOROPLETH FUNCTION
 choro <- function(merged_df){
+    merged_df <- merged_df %>% rename(Neighbourhood = DISTRICT)
     choro <- merged_df %>%
-            ggplot(aes(label = DISTRICT)) +
+            ggplot(aes(label = Neighbourhood)) +
              scale_fill_distiller(palette = "GnBu", direction  = 1) +
-             geom_polygon(data = merged_df, aes(fill = count, x = long, y = lat, group = group)) +
+             geom_polygon(data = merged_df, aes(fill = Count, x = long, y = lat, group = group)) +
              theme_minimal() +
              labs(title = 'Crime Count by Neighbourhood', x = NULL, y = NULL, fill = "Crime Count") +
              theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5)) + 
@@ -84,14 +85,9 @@ choro <- function(merged_df){
 
 # HEATMAP FUNCTION
 heatmap <- function(df) {
-  df <- df %>%
-          mutate(DAY_OF_WEEK = factor(DAY_OF_WEEK, levels = c("Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"))) %>%
-          mutate(HOUR = factor(HOUR))
   heatmap <- df %>%
-              rename(
-                Hour = HOUR,
-                Day = DAY_OF_WEEK
-              ) %>%
+              mutate(Day = factor(DAY_OF_WEEK, levels = c("Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"))) %>%
+              mutate(Hour = factor(HOUR)) %>%
               ggplot(aes(Hour, Day)) +
                 geom_bin2d() +
                 scale_fill_distiller(palette="GnBu", direction=1) +
@@ -106,22 +102,39 @@ heatmap <- function(df) {
 # TREND PLOT FUNCTION
 trendplot <- function(df){
     trend <- df %>%
-        group_by(YEAR, MONTH) %>%
-        summarise(count = n()) %>%
-        mutate(date = make_date(YEAR, MONTH, 1)) %>%
-        rename(
-          Date = date,
-          Count = count
-        ) %>%
-        ggplot(aes(x = Date, y = Count)) +
-        geom_line(color = "#00AFBB") +
-        labs(title = 'Crime Trend', x = "Date", y = "Crime Count") +
-        scale_x_date(date_labels = "%b %Y") +
-        theme_minimal()+
-        theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
+        mutate(Year = factor(YEAR)) %>%
+        group_by(Year, MONTH) %>%
+        summarise(Count = n()) %>%
+        mutate(Month = make_date(year=0, month=MONTH)) %>%
+        ggplot(aes(x = Month, y = Count)) +
+          geom_line(aes(color = Year)) +
+          scale_color_brewer(palette="GnBu") +
+          labs(title = 'Crime Trend', x = "Month", y = "Crime Count") +
+          scale_x_date(date_labels = "%b") +
+          theme_minimal()+
+          theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
       trend <- ggplotly(trend) %>% config(displayModeBar = FALSE)
       return(trend)
 }
+
+# tooltip code below work but make lines disappear??
+#trendplot <- function(df){
+#    trend <- df %>%
+#        mutate(Year = factor(YEAR)) %>%
+#        group_by(Year, MONTH) %>%
+#        summarise(Count = n()) %>%
+#        mutate(Month = make_date(year=0, month=MONTH)) %>%
+#        ggplot(aes(x = Month, y = Count)) +
+#          geom_line(aes(color = Year)) +
+#          scale_color_brewer(palette="GnBu") +
+#          labs(title = 'Crime Trend', x = "Month", y = "Crime Count", text = paste('Year: ', Year, '<br> Month: ', MONTH, '<br> Count: ', Count)) +
+#          scale_x_date(date_labels = "%b") +
+#          theme_minimal()+
+#          theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
+#      trend <- ggplotly(trend, tooltip = "text") %>% config(displayModeBar = FALSE)
+#      return(trend)
+#}
+
 
 # MAKE BAR PLOT 
 crime_bar_plot <- function(df) {
@@ -138,6 +151,7 @@ crime_bar_plot <- function(df) {
         ggtitle("Crime Count by Type") +
         theme_minimal() +
         theme(text = element_text(size = 14), plot.title = element_text(hjust = 0.5))
+
     gp <- ggplotly(p) %>% config(displayModeBar = FALSE)
     return(gp)
 }
@@ -146,7 +160,7 @@ crime_bar_plot <- function(df) {
 make_choropleth <- function(df, gdf, year = NULL, neighbourhood = NULL, crime = NULL) {
     inner_df <- plot_filter(df, year = year, neighbourhood = neighbourhood, crime = crime) %>%
             group_by(DISTRICT) %>%
-            summarize(count = n()) %>%
+            summarize(Count = n()) %>%
             mutate(DISTRICT = str_replace(DISTRICT, "Downtown5", "Charlestown")) 
     # merge with geo data
     merged_df <- inner_join(gdf, inner_df, by = "DISTRICT")
