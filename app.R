@@ -88,7 +88,7 @@ heatmap <- function(df) {
   heatmap <- df %>%
               mutate(Day = factor(DAY_OF_WEEK, levels = c("Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"))) %>%
               mutate(Hour = factor(HOUR)) %>%
-              ggplot(aes(Hour, Day)) +
+              ggplot(aes(x = Hour, y = Day)) +
                 geom_bin2d() +
                 scale_fill_distiller(palette="GnBu", direction=1) +
                 theme_minimal() +
@@ -108,7 +108,7 @@ trendplot <- function(df){
         mutate(Month = make_date(year=0, month=MONTH)) %>%
         ggplot(aes(x = Month, y = Count)) +
           geom_line(aes(color = Year)) +
-          scale_color_brewer(palette="GnBu") +
+          scale_color_brewer(palette="Paired") +
           labs(title = 'Crime Trend', x = "Month", y = "Crime Count") +
           scale_x_date(date_labels = "%b") +
           theme_minimal()+
