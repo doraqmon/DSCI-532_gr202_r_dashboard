@@ -82,7 +82,10 @@ choro <- function(merged_df){
 
 # HEATMAP FUNCTION
 heatmap <- function(df) {
-    heatmap <- df %>%
+  df <- df %>%
+          mutate(DAY_OF_WEEK = factor(DAY_OF_WEEK, levels = c("Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"))) %>%
+          mutate(HOUR = factor(HOUR))
+  heatmap <- df %>%
               rename(
                 Hour = HOUR,
                 Weekday = DAY_OF_WEEK
