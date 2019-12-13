@@ -67,7 +67,8 @@ plot_filter <- function(df, year = NULL, neighbourhood = NULL, crime = NULL) {
 # mapping function based on all of the above
 # CHOROPLETH FUNCTION
 choro <- function(merged_df){
-    choro <- ggplot(merged_df) +
+    choro <- merged_df %>%
+            ggplot(aes(label = DISTRICT)) +
              scale_fill_distiller(palette = "GnBu", direction  = 1) +
              geom_polygon(data = merged_df, aes(fill = count, x = long, y = lat, group = group)) +
              theme_minimal() +
@@ -81,10 +82,15 @@ choro <- function(merged_df){
 
 # HEATMAP FUNCTION
 heatmap <- function(df) {
-    df <- df %>%
+  df <- df %>%
           mutate(DAY_OF_WEEK = factor(DAY_OF_WEEK, levels = c("Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"))) %>%
           mutate(HOUR = factor(HOUR))
-    heatmap <- ggplot(df, aes(HOUR, DAY_OF_WEEK)) +
+  heatmap <- df %>%
+              rename(
+                Hour = HOUR,
+                Weekday = DAY_OF_WEEK
+              ) %>%
+              ggplot(aes(Hour, Weekday)) +
                 geom_bin2d() +
                 scale_fill_distiller(palette="GnBu", direction=1) +
                 theme_minimal() +
@@ -101,7 +107,11 @@ trendplot <- function(df){
         group_by(YEAR, MONTH) %>%
         summarise(count = n()) %>%
         mutate(date = make_date(YEAR, MONTH, 1)) %>%
-        ggplot(aes(x = date, y = count)) +
+        rename(
+          Date = date,
+          Count = count
+        ) %>%
+        ggplot(aes(x = Date, y = Count)) +
         geom_line(color = "#00AFBB") +
         labs(title = 'Crime Trend', x = "Date", y = "Crime Count") +
         scale_x_date(date_labels = "%b %Y") +
@@ -114,8 +124,12 @@ trendplot <- function(df){
 # MAKE BAR PLOT 
 crime_bar_plot <- function(df) {
     p <- df %>% 
+        rename(
+          CrimeType = OFFENSE_CODE_GROUP,
+          Count = n
+        ) %>%
         ggplot() + 
-        geom_bar(aes(x = OFFENSE_CODE_GROUP, y = n), stat = "identity", fill = "#4682B4") +
+        geom_bar(aes(x = CrimeType, y = Count), stat = "identity", fill = "#4682B4") +
         coord_flip() +
         xlab("Crime") + 
         ylab("Crime Count") +
