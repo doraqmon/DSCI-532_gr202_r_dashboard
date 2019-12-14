@@ -22,7 +22,7 @@ We received valuable information both from watching our peers interact with our 
 
 
 ### App Maintenance 
-Every prevalent functions have [docstrings](https://github.com/UBC-MDS/DSCI-532_gr202_dashboard/issues/56) included in order to maintain and uphold best coding practices.
+All prevalent functions have [docstrings](https://github.com/UBC-MDS/DSCI-532_gr202_dashboard/issues/56) included in order to maintain and uphold best coding practices.
 
 ### Note 
 Many of the issues referenced above were given to us on our personal Github repos. Therefore, we can't link it in this document. 
