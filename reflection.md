@@ -13,7 +13,7 @@
   
 ### Peer Feedback and Updates to App
 We received valuable information both from watching our peers interact with our app, and also from their [helpful feedback](https://github.com/UBC-MDS/DSCI-532_gr202_dashboard/issues/54).  Overall, users enjoyed our aesthetics and the functionality of the app, and for the most part used the app as we had intended. However, a few specific areas of improvement were noted, which we address below: 
-- The major complaint with the app, which was consistent across all reviewers was that our app deployment on Heroku is very slow, as has been documented above. We've significantly improved the speed of our app for Milestone 4
+- The major complaint with the app, which was consistent across all reviewers was that our app deployment on Heroku is [very slow](https://github.com/UBC-MDS/DSCI-532_gr202_dashboard/issues/53), as has been documented above. We've significantly improved the speed of our app for Milestone 4
   - In order to improve the speed of our app, we've decided to use a smaller dataset which only incorporates the data associated with the top ten most commited crimes. This significantly reduced our overhead and our app can load much quicker than before. 
 - Another suggestion we've received is that many wanted to be able to vizualize how the trend of crime changes over the years. So we've added 4 lines in the crime trend plots to visualize trends across years. 
 - We were able to get custom tooltip for the choropleth, heatmap and the bar graph in order to display relevant information of those plots in an aesthetically pleasing manner. However, when we tried to customize the tooltip for the trend graph, the lines disappear. We believe this is most likely a Plotly or Dash bug. Therefore, we are just using default tooltip for the trend graph. (Which is why the month section of the tooltip shows a POSTIX date with year as 0)
@@ -21,9 +21,11 @@ We received valuable information both from watching our peers interact with our 
 - We've talked to Firas regarding whether to normalize the choropleth map to percentages instead of counts. Firas suggested to leave the choropleth as it is, and just display the count of crime committed instead of percentages. 
 
 
-### App Maintenance and Refactoring
-We have done significant refactoring of our code. The app file structure has been reorganized, by [abstracting](https://github.com/UBC-MDS/DSCI-532_gr202_dashboard/issues/55) function definitions out of our app.py file to a new separate functions.py helper file. Code hygiene has also been improved by adding detailed [docstrings](https://github.com/UBC-MDS/DSCI-532_gr202_dashboard/issues/56) for all functions, and making our code 'Pythonic' when possible (for example, [dictionary comprehensions](https://github.com/UBC-MDS/DSCI-532_gr202_dashboard/issues/57) for long dropdown menus). 
+### App Maintenance 
+Every prevalent functions have [docstrings](https://github.com/UBC-MDS/DSCI-532_gr202_dashboard/issues/56) included in order to maintain and uphold best coding practices.
 
+### Note 
+Many of the issues referenced above were given to us on our personal Github repos. Therefore, we can't link it in this document. 
 
 ### Github Issues
 - Teammate Issues 
